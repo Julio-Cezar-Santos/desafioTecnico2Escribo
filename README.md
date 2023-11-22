@@ -161,7 +161,7 @@ CREATE TABLE telefones (
       "id": 1,
       "data_criacao": "2023-01-01T00:00:00.000Z",
       "data_atualizacao": "2023-01-01T00:00:00.000Z",
-      "ultimo_login": null,
+      "ultimo_login": "2023-01-01T00:00:00.000Z",
       "token": "seu-token-de-autenticacao"
     }
     ```
