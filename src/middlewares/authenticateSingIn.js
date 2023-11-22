@@ -11,16 +11,20 @@ const authenticateSignIn = async (req, res, next) => {
 
 	try {
 		const token = authorization.split(" ")[1];
-
 		const { id } = jwt.verify(token, process.env.JWT_SECRET);
-
+		
+		
 		const user = await knex("usuarios").where({ id }).first();
 
 		req.loggedInUser = user;
 
 		next();
-	} catch (erro) {
-		return res.status(500).json({ mensagem: "Erro interno do servidor" });
+	} catch (error) {
+		if (error.name === "TokenExpiredError") {
+			return res.status(401).json({ mensagem: "Sessão inválida" });
+		} else {
+			return res.status(401).json({ mensagem: "Não autorizado" });
+		}
 	}
 };
 

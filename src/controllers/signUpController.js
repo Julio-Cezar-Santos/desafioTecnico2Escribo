@@ -23,8 +23,8 @@ const signUp = async (req, res) => {
 			email,
 			senha: hashedPassword,
 			data_criacao: new Date().toISOString(),
-			data_atualizacao: new Date().toISOString(),
-			ultimo_login: null,
+			data_atualizacao: null,
+			ultimo_login: new Date().toISOString(),
 		};
 
 		const newUser = await userModel.create(user);
@@ -37,7 +37,7 @@ const signUp = async (req, res) => {
 			);
 		}
 
-		const token = jwt.sign({ userId: newUser[0].id }, process.env.JWT_SECRET, { expiresIn: "30m" });
+		const token = jwt.sign({ id: newUser[0].id }, process.env.JWT_SECRET, { expiresIn: "5m" });
 
 		const updateLogin = await userModel.updateLastLogin(newUser[0].id);
 
