@@ -3,8 +3,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const singIn = async (req, res) => {
-	// eslint-disable-next-line no-unused-vars
-	const { email, senha: senhaBody } = req.body;
+	const { email, senha} = req.body;
 
 	try {
 		const user = await userModel.getByEmail(email);
@@ -13,7 +12,7 @@ const singIn = async (req, res) => {
 			return res.status(404).json({ mensagem: "Usuário e/ou senha inválido(s)." });
 		}
 
-		const isPasswordValid = await bcrypt.compare(senhaBody, user.senha);
+		const isPasswordValid = await bcrypt.compare(senha, user.senha);
 		if (!isPasswordValid) {
 			return res.status(401).json({ mensagem: "Usuário e/ou senha inválido(s)." });
 		}

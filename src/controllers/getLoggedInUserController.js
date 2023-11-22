@@ -1,5 +1,5 @@
 const getLoggedInUser = async (req, res) => {
-	const user = req.loggedInUser;
+	const {senha:_, ...user } = req.loggedInUser;
 	try {
 		return res.json(user);
 	} catch (error) {
