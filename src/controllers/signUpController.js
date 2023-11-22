@@ -37,7 +37,7 @@ const signUp = async (req, res) => {
 			);
 		}
 
-		const token = jwt.sign({ id: newUser[0].id }, process.env.JWT_SECRET, { expiresIn: "5m" });
+		const token = jwt.sign({ id: newUser[0].id }, process.env.JWT_SECRET, { expiresIn: "30m" });
 
 		const updateLogin = await userModel.updateLastLogin(newUser[0].id);
 

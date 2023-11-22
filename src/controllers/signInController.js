@@ -17,7 +17,7 @@ const singIn = async (req, res) => {
 			return res.status(401).json({ mensagem: "Usuário e/ou senha inválido(s)." });
 		}
 
-		const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: "5m" });
+		const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: "30m" });
 	
 		const updateLogin = await userModel.updateLastLogin(user.id);
 		const loggedInUser = {
