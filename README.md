@@ -134,7 +134,6 @@ CREATE TABLE telefones (
 
 ## 📌 Endpoints
 
-### Cadastrar Usuário:
 
 - **POST /signUp**: Cria um novo usuário. Requer um corpo JSON com as informações do usuário.
   - Exemplo de requisição:
