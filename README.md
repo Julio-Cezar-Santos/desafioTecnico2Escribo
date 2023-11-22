@@ -45,7 +45,13 @@ Este é um projeto desenvolvido como parte de um desafio técnico para a Escribo
 	</a>
 </div>
 
+## 🕹️ Funcionalidades
 
+A API conta com as funcionalidades listadas abaixo:
+
+- [x] Cadastrar Usuário
+- [X] Fazer Login
+- [x] Detalhar Perfil do Usuário
 
 ## Deploy
 
@@ -53,7 +59,144 @@ A aplicação está disponível em: [https://desafiotecnico2escribo.onrender.com
 
 ## Configuração
 
+### Pré-requisitos
+- [Node.js](https://nodejs.org/en/download/current) instalado
+- [Git](https://git-scm.com/downloads istalado
+
+### Instalação
+
 1. **Clone o repositório:**
 
    ```bash
-   git clone https://github.com/seu-usuario/desafiotecnico2escribo.git
+   	git clone git@github.com:Julio-Cezar-Santos/desafioTecnico2Escribo.git
+   ```
+
+2. **Abra seu terminal na pasta do repositório e execute o comando:**
+
+    ```bash
+    npm install
+    ```
+
+3. **Após a instalação ser efetuada, crie e configure seu arquivo **.env** com base no .env.example:**
+
+    ```env
+    # Porta para o Express
+    PORT= Porta_Express (Ex.: 3000)
+
+    # Dados de conexão com o Database
+    DB_HOST= Host_Do_Databse
+    DB_PORT= Porta_Do_Database
+    DB_USER= User_Do_Database
+    DB_PASS= Senha_Do_Database
+    DB_NAME= Nome_Do_Database
+    
+    # Senha única para criação e autenticação de Tokens
+    JWT_SECRET= Chave_Secreta_Para_Tokens 
+    ```
+4. **Com seu arquivo **.env** configurado, inicialize a API:**
+
+    ```bash
+    npm run dev
+    ```
+## 🛢️ Estruturação do Banco de Dados
+
+Para finalizar, antes de utilizar das funcionalidades da API, é necessário que o banco de dados esteja estruturado para receber as informações e alterações corretamente. Para isso, conecte-se ao banco utilizando algum Database Manager (Ex.: Beekeeper Studio, etc.) e execute os códigos escrito no arquivo `schema.sql`, seguindo passo a passo.
+
+<details>
+<summary><b>Schema Code:</b></summary>
+    
+```sql
+-- Passo 1: Remover tabelas caso existam
+DROP TABLE IF EXISTS telefones;
+DROP TABLE IF EXISTS usuarios;
+
+-- Passo 2: Criar novas tabelas
+CREATE TABLE usuarios (
+    id SERIAL PRIMARY KEY,
+    nome VARCHAR(255) NOT NULL,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    senha VARCHAR(255) NOT NULL,
+    data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    data_atualizacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    ultimo_singIn TIMESTAMP
+);
+
+CREATE TABLE telefones (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES usuarios(id) ON DELETE CASCADE,
+    numero VARCHAR(255) NOT NULL,
+    ddd VARCHAR(10) NOT NULL,
+    data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    data_atualizacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
+</details>
+
+## 📌 Endpoints
+
+### Cadastrar Usuário:
+
+- **POST /signUp**: Cria um novo usuário. Requer um corpo JSON com as informações do usuário.
+  - Exemplo de requisição:
+    ```json
+    {
+      "nome": "Nome do Usuário",
+      "email": "usuario@email.com",
+      "senha": "senha123",
+      "telefones": [
+        {
+          "numero": "123456789",
+          "ddd": "11"
+        },
+        {
+          "numero": "987654321",
+          "ddd": "22"
+        }
+      ]
+    }
+    ```
+  - Exemplo de resposta:
+    ```json
+    {
+      "id": 1,
+      "data_criacao": "2023-01-01T00:00:00.000Z",
+      "data_atualizacao": "2023-01-01T00:00:00.000Z",
+      "ultimo_login": null,
+      "token": "seu-token-de-autenticacao"
+    }
+    ```
+
+- **POST /signIn**: Autentica um usuário. Requer um corpo JSON com e-mail e senha.
+  - Exemplo de requisição:
+    ```json
+    {
+      "email": "usuario@email.com",
+      "senha": "senha123"
+    }
+    ```
+  - Exemplo de resposta:
+    ```json
+    {
+      "id": 1,
+      "data_criacao": "2023-01-01T00:00:00.000Z",
+      "data_atualizacao": "2023-01-01T00:00:00.000Z",
+      "ultimo_login": "2023-01-01T12:34:56.789Z",
+      "token": "seu-token-de-autenticacao"
+    }
+    ```
+- **GET /getUser**: Retorna as informações do usuário autenticado.
+  - Exemplo de resposta:
+    ```json
+    {
+      "id": 1,
+      "nome": "Nome do Usuário",
+      "email": "usuario@email.com",
+      "data_criacao": "2023-01-01T00:00:00.000Z",
+      "data_atualizacao": "2023-01-01T00:00:00.000Z",
+      "ultimo_login": "2023-01-01T12:34:56.789Z"
+    }
+    ```
+
+### Observações
+- As datas são representadas no formato ISO 8601.
+- O token de autenticação gerado após o registro ou login deve ser incluído no cabeçalho da requisição como "Authorization: Bearer {seu-token}" para acessar rotas autenticadas.
